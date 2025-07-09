@@ -33,7 +33,6 @@ RUN chown -R www-data:www-data \
     /var/www/bootstrap/cache
 
 # Étape 8 : Exposition du port FPM
-EXPOSE 9000
-
+EXPOSE 8080
 # Étape 9 : Commande de démarrage
-CMD ["php-fpm"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
