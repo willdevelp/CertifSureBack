@@ -1,7 +1,7 @@
-# Étape 1 : Image de base
+# Étape 1 : Image de base PHP
 FROM php:8.2-fpm
 
-# Étape 2 : Installation des dépendances système
+# Étape 2 : Dépendances système
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpng-dev \
@@ -21,18 +21,29 @@ COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 # Étape 4 : Création du dossier de travail
 WORKDIR /var/www
 
-# Étape 5 : Copie du projet
+# Étape 5 : Copie du code source Laravel
 COPY . .
 
-# Étape 6 : Installation des dépendances Laravel
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+# Étape 6 : Copie et configuration initiale
+RUN cp .env.example .env
 
-# Étape 7 : Droits sur les dossiers nécessaires
+# Étape 7 : Installation des dépendances Laravel (AVANT les commandes artisan)
+RUN composer install
+
+
+# Étape 8 : Génération de la clé Laravel
+RUN php artisan key:generate
+
+# Étape 9 : Création du lien storage
+RUN php artisan storage:link
+
+# Étape 10 : Permissions
 RUN chown -R www-data:www-data \
     /var/www/storage \
     /var/www/bootstrap/cache
 
-# Étape 8 : Exposition du port FPM
+# Étape 11 : Exposition du port
 EXPOSE 8080
-# Étape 9 : Commande de démarrage
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+
+# Étape 12 : Commande de démarrage
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
