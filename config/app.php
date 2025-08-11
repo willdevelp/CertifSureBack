@@ -53,7 +53,7 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
-    'frontend_url' => env('FRONTEND_URL', 'http://localhost:5173'),
+    'frontend_url' => env('FRONTEND_URL', 'https://certif-sure-front.vercel.app/'),
 
     /*
     |--------------------------------------------------------------------------
@@ -124,7 +124,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'client_url' => env('CLIENT_URL', 'http://localhost:5174'),
+    'client_url' => env('CLIENT_URL', 'https://certif-sure-fron.vercel.app/'),
 
     /*
     |--------------------------------------------------------------------------
